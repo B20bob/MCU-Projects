@@ -7,7 +7,7 @@ import busio
 import adafruit_mcp9808
 
 
-i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses board.SCL and board.SDA
+i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0
 
 # To initialise using the default address:
 mcp = adafruit_mcp9808.MCP9808(i2c)
