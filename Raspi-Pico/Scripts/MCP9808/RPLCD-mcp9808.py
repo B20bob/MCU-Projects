@@ -34,7 +34,7 @@ mcp = adafruit_mcp9808.MCP9808(i2c,address=0x18)
 # mcp = adafruit_mcp9808.MCP9808(i2c_bus, address=0x19)
 
 while True:
-    
+
     def read_temp():
         tempC = mcp.temperature
         temp = tempC * 9/5.0 + 32
@@ -48,5 +48,5 @@ while True:
     sleep(3)
 
     lcd.clear()
-    sleep(5)
+    sleep(3)
     lcd.close(clear=True)
