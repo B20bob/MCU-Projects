@@ -39,6 +39,7 @@ while True:
         temp = tempC * 9/5.0 + 32
         temp = int(temp)
  #       temp = str(round(temp, 2))
+        temp = str(temp)
         return temp
 
     print("TempC: " + read_temp())    
