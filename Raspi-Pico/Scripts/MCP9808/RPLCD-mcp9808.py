@@ -42,10 +42,10 @@ while True:
         return temp
     
 lcd.write_string(lcd_temp(tempF))
-    lcd.crlf()
-    lcd.write_string(tempF)
-    sleep(3)
+lcd.crlf()
+lcd.write_string(tempF)
+sleep(3)
 
-    lcd.clear()
-    sleep(5)
-    lcd.close(clear=True)
+lcd.clear()
+sleep(5)
+lcd.close(clear=True)
