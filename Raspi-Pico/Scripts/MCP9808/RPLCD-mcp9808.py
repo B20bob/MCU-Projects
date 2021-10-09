@@ -40,7 +40,7 @@ while True:
         temp = str(round(temp, 1))
         return temp
 
-print(temp)    
+print(read_temp)    
 lcd.write_string(read_temp())
 sleep(3)
 
