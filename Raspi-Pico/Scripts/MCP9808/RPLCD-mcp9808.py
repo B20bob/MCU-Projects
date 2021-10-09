@@ -37,11 +37,11 @@ while True:
     tempC = mcp.temperature
     tempF = tempC * 9 / 5 + 32
 
-    def lcd_temp():
-        temp = tempF
-        return temp
+#    def lcd_temp():
+#        temp = tempF
+#        return temp
 
-print(lcd_temp)    
+print(tempF)    
 lcd.write_string(lcd_temp(tempF))
 lcd.crlf()
 lcd.write_string(tempF)
