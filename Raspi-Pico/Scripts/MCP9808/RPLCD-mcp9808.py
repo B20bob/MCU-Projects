@@ -37,12 +37,12 @@ while True:
     def read_temp():
         tempC = mcp.temperature
         temp = tempC * 9/5.0 + 32
-        temp = int(temp)
+        temp = int(round(temp, 2))
  #       temp = str(round(temp, 2))
         temp = str(temp)
         return temp
 
-    print("TempC: " + read_temp())    
+    print("Temp: " + read_temp())    
     lcd.write_string(read_temp())
     sleep(3)
 
