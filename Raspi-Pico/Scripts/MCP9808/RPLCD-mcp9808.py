@@ -40,7 +40,8 @@ while True:
     def lcd_temp():
         temp = tempF
         return temp
-    
+
+print(lcd_temp)    
 lcd.write_string(lcd_temp(tempF))
 lcd.crlf()
 lcd.write_string(tempF)
