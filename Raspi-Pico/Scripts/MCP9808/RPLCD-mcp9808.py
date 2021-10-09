@@ -40,10 +40,10 @@ while True:
         temp = str(round(temp, 1))
         return temp
 
-    print(read_temp)    
+    print("TempC: " + read_temp())    
     lcd.write_string(read_temp())
     sleep(3)
-    
+
     lcd.clear()
     sleep(5)
     lcd.close(clear=True)
