@@ -43,7 +43,10 @@ while True:
         temp = str(temp)
         return temp
 
-    print("Temp: " + read_temp() + "F")    
+# Print output to terminal
+    print("Temp: " + read_temp() + "F")
+
+# Print output to LCD
     lcd.write_string("Temp: " + read_temp() + "F")
     sleep(3)
 
