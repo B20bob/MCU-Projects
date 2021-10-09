@@ -51,5 +51,5 @@ while True:
     sleep(3)
 
     lcd.clear()
-    sleep(3)
+    sleep(0.5)
     lcd.close(clear=True)
