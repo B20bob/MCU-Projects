@@ -36,7 +36,7 @@ mcp = adafruit_mcp9808.MCP9808(i2c,address=0x18)
 while True:
     def read_temp():
         tempC = mcp.temperature
- #       temp = tempC * 9/5.0 + 32
+        temp = tempC * 9/5.0 + 32
         temp = int(temp)
  #       temp = str(round(temp, 2))
         temp = str(temp)
