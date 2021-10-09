@@ -37,12 +37,12 @@ while True:
     def read_temp():
         tempC = mcp.temperature
         temp = tempC * 9/5.0 + 32
-#        temp = int(temp) / 1.00
+#        temp = int(temp) / 1.00   # Original example said to use integer, but it is not needed for this script. It causes output to only be whole number.
         temp = str(round(temp, 2))
         temp = str(temp)
         return temp
 
-    print("Temp: " + read_temp())    
+    print("Temp: " + read_temp() + "F")    
     lcd.write_string(read_temp())
     sleep(3)
 
