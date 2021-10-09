@@ -37,8 +37,8 @@ while True:
     def read_temp():
         tempC = mcp.temperature
         temp = tempC * 9/5.0 + 32
-        temp = int(temp)
- #       temp = str(round(temp, 2))
+        temp = int(temp) / 1000.0
+        temp = str(round(temp, 2))
         temp = str(temp)
         return temp
 
