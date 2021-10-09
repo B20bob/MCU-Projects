@@ -43,7 +43,7 @@ while True:
         return temp
 
     print("Temp: " + read_temp() + "F")    
-    lcd.write_string(read_temp())
+    lcd.write_string("Temp: " + read_temp() = "F")
     sleep(3)
 
     lcd.clear()
