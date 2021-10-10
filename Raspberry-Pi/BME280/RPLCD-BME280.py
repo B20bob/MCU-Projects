@@ -54,7 +54,7 @@ while True:
 
 
     
-    print(read_temp())
-    print(read_humidity())
-    print(read_baro_pressure())
+    print("Temp: " + read_temp() + "F")
+    print("Humidity: " + read_humidity() + "%%")
+    print("Pressure: " + read_baro_pressure() + "hPa")
     sleep(3)
