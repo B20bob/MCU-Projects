@@ -33,6 +33,7 @@ bme280.sea_level_pressure = 1010.0
 
 while True:
 
+    # Define functions to allow RPLCD to output sensor data
     def read_temp():
         tempC = bme280.temperature
         temp = tempC * 9/5.0 + 32
@@ -53,8 +54,18 @@ while True:
         return pressure
 
 
-    
+    # Print output to terminal
     print("Temp: " + read_temp() + "F")
     print("Humidity: " + read_humidity() + "%")
     print("Pressure: " + read_baro_pressure() + "hPa")
-    sleep(3)
+
+    # Print output to LCD
+    lcd.write_string("Temp: " + read_temp() + "F")
+    lcd.crlf()
+    lcd.write_string("Humidity: " + read_humidity() + "%")
+    lcd.crlf()
+    lcd.write_string("Pressure: " + read_baro_pressure() + "hPa")
+    sleep(30)
+    lcd.clear()
+    sleep(0.5)
+    #lcd.close(clear=True)
