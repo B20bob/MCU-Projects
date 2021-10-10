@@ -1,5 +1,6 @@
-#!/usr/bin/python3
+'''Use with Raspberry pi, '''
 
+#!/usr/bin/python3
 
 from RPLCD import i2c
 from time import sleep
