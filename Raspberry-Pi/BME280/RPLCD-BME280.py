@@ -1,4 +1,7 @@
-'''Use with Raspberry pi, '''
+'''
+- Use with Raspberry pi.
+- See README for requisites.
+'''
 
 #!/usr/bin/python3
 
