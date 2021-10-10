@@ -4,4 +4,5 @@
 
 ## Adafruit BME280 guide: https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout?view=all#python-circuitpython-test
 
-## 
+## Make sure to install Blinka, so you can install + run Circuitpython libraries on RasPi:
+https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi
