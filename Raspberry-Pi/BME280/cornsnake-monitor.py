@@ -66,7 +66,7 @@ while True:
     print("Pressure: " + read_baro_pressure() + "hPa")
 
     # Print output to LCD
-    lcd.write_string("   cornsnake.local")
+    lcd.write_string("  cornsnake.local")
     lcd.crlf()
     lcd.write_string("Temp: " + read_temp() + "F")
     lcd.crlf()
