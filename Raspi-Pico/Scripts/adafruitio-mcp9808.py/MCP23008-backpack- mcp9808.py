@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
-# SPDX-License-Identifier: MIT
-
-"""Simple test for 16x2 character lcd connected to an MCP23008 I2C LCD backpack."""
 import time
 import board
 import busio
@@ -36,7 +32,7 @@ while True:
     # Turn backlight on
     lcd.backlight = True
 
-    lcd.message = "    MCP9808 Temp\n\n" + read_temp() + "F"
+    lcd.message = "    MCP9808 Temp\n\n" + "       " + read_temp() + "F"
 
     time.sleep(30)
     lcd.clear()
