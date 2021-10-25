@@ -3,6 +3,7 @@ import board
 import busio
 import adafruit_character_lcd.character_lcd_i2c as character_lcd
 import adafruit_mcp9808
+import adafruit_thermistor
 
 # Modify this if you have a different sized Character LCD
 lcd_columns = 20
@@ -19,6 +20,10 @@ mcp = adafruit_mcp9808.MCP9808(mcpi2c, address=0x18)
 # Initialize the MCP9808
 mcp = adafruit_mcp9808.MCP9808(mcpi2c)
 
+# Set up NTC3950
+thermistor = adafruit_thermistor.Thermistor(board.GP26, 10000.0, 10000.0, 25.0, 3950.0, high_side=False)
+
+
 while True:
     
     # Define functions to allow RPLCD to output sensor data
@@ -28,11 +33,18 @@ while True:
         temp = str(round(temp, 2))
         temp = str(temp)
         return temp
+        
+    def ntc_temp():
+        NTCtempC = thermistor.temperature
+        NTCtempF = NTCtempC * 9/5.0 + 32
+        NTCtempF = str(round(NTCtempF, 2))
+        NTCtempF = str(NTCtempF)
+        return NTCtempF
     
     # Turn backlight on
     lcd.backlight = True
 
-    lcd.message = "    MCP9808 Temp\n\n" + "       " + read_temp() + "F"
+    lcd.message = "MCP9808 Temp:" + read_temp() + "F\n\n" + "NTC Temp:" + ntc_temp() + "F"
 
     time.sleep(30)
     lcd.clear()
