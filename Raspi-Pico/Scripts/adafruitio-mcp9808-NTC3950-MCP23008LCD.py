@@ -140,19 +140,27 @@ while True:
         # truncate to two decimal points
         temp = str(temp)[:5]
         print("ambient temperature is %s degrees C" % temp)
-        # read temperature from thermistor
-        NTCtempC = thermistor.temperature
-        NTCtempF = NTCtempC * 9/5.0 + 32
+        
+        # read temperature from thermistor and define variable for LCD to read from
 
-        print("warm hide temp is %s degrees F" % NTCtempF)
+        def ntc_temp():
+            NTCtempC = thermistor.temperature
+            NTCtempF = NTCtempC * 9/5.0 + 32
+            NTCtempF = str(round(NTCtempF, 2))
+            NTCtempF = str(NTCtempF)
+            return NTCtempF
+        
+        thermistortempF = ntc_temp()
+
+        print("warm hide temp is %s degrees F" % thermistortempF)
 
         
         # publish it to io
         print("Publishing %s to ambient temperature feed..." % temp)
         io.publish("mr-snake-ambient-temp", temp)
 
-        print("publishing %s to warm hide temp feed..." % NTCtempF)
-        io.publish("mr-snake-warmhide-temp", NTCtempF)
+        print("publishing %s to warm hide temp feed..." % thermistortempF)
+        io.publish("mr-snake-warmhide-temp", thermistortempF)
 
         print("Published!")
         led_pin.value = False
