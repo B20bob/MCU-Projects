@@ -25,6 +25,7 @@ from adafruit_io.adafruit_io import IO_MQTT
 import adafruit_io
 import adafruit_mcp9808
 import microcontroller
+import adafruit_thermistor
 
 
 ### WiFi ###
@@ -118,7 +119,8 @@ i2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1
 # initialise mcp9808 using the default address:
 mcp = adafruit_mcp9808.MCP9808(i2c)
 
-
+# Set up NTC3950
+thermistor = adafruit_thermistor.Thermistor(board.GP26, 10000.0, 10000.0, 25.0, 3950.0, high_side=False)
 
 prv_refresh_time = 0.0
 while True:
@@ -137,10 +139,21 @@ while True:
         temp = mcp.temperature * 9 / 5 + 32
         # truncate to two decimal points
         temp = str(temp)[:5]
-        print("temperature is %s degrees C" % temp)
+        print("ambient temperature is %s degrees C" % temp)
+        # read temperature from thermistor
+        NTCtempC = thermistor.temperature
+        NTCtempF = NTCtempC * 9/5.0 + 32
+
+        print("warm hide temp is %s degrees F" % NTCtempF)
+
+        
         # publish it to io
         print("Publishing %s to ambient temperature feed..." % temp)
         io.publish("mr-snake-ambient-temp", temp)
+
+        print("publishing %s to warm hide temp feed..." % NTCtempF)
+        io.publish("mr-snake-warmhide-temp", NTCtempF)
+
         print("Published!")
         led_pin.value = False
         prv_refresh_time = time.monotonic()
