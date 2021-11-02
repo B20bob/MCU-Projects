@@ -8,6 +8,12 @@ Required libraries:
 - adafruit_thermistor
 - adafruit_mcp9808
 - adafruit_requests
+- adafruit_character_lcd
+--------------------------------------------------
+To do in order to get this script ready to deploy for mr snake:
+- Add funciton for BME280.
+- Add LCD portion of code to the script.
+
 
 """
 
@@ -26,6 +32,7 @@ import adafruit_io
 import adafruit_mcp9808
 import microcontroller
 import adafruit_thermistor
+import adafruit_character_lcd
 
 
 ### WiFi ###
