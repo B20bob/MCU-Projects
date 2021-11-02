@@ -1,3 +1,17 @@
+"""
+Required libraries:
+- adafruit_bus_device
+- adafruit_esp32spi
+- adafruit_io
+- adafruit_mcp230xx
+- adafruit_register
+- adafruit_thermistor
+- adafruit_mcp9808
+- adafruit_requests
+
+"""
+
+
 import time
 from microcontroller import cpu
 import board
@@ -9,8 +23,8 @@ import adafruit_esp32spi.adafruit_esp32spi_socket as socket
 import adafruit_minimqtt.adafruit_minimqtt as MQTT
 from adafruit_io.adafruit_io import IO_MQTT
 import adafruit_io
-import adafruit_thermistor
 import adafruit_mcp9808
+import microcontroller
 
 
 ### WiFi ###
@@ -104,8 +118,7 @@ i2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1
 # initialise mcp9808 using the default address:
 mcp = adafruit_mcp9808.MCP9808(i2c)
 
-# Set up NTC3950
-thermistor = adafruit_thermistor.Thermistor(board.GP26, 10000.0, 10000.0, 25.0, 3950.0, high_side=False)
+
 
 prv_refresh_time = 0.0
 while True:
@@ -114,12 +127,10 @@ while True:
         io.loop()
     except (ValueError, RuntimeError) as e:
         print("Failed to get data, retrying\n", e)
-        wifi.reset()
-        io.reconnect()
-        continue
+        microcontroller.reset()
 
     # Send a new temperature reading to IO every 60 seconds
-    
+
     if (time.monotonic() - prv_refresh_time) > 60:
         led_pin.value = True
         # read tempurate from mcp9808
