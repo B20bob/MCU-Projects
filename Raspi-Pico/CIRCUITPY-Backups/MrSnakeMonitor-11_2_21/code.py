@@ -8,12 +8,6 @@ Required libraries:
 - adafruit_thermistor
 - adafruit_mcp9808
 - adafruit_requests
-- adafruit_character_lcd
---------------------------------------------------
-To do in order to get this script ready to deploy for mr snake:
-- Add funciton for BME280.
-- Add LCD portion of code to the script.
-
 
 """
 
@@ -32,7 +26,6 @@ import adafruit_io
 import adafruit_mcp9808
 import microcontroller
 import adafruit_thermistor
-import adafruit_character_lcd
 
 
 ### WiFi ###
@@ -89,12 +82,8 @@ def on_led_msg(client, topic, message):
 
 # Connect to WiFi
 print("Connecting to WiFi...")
-try:
-    wifi.reset()
-    wifi.connect()
-    print("Connected!")
-except RuntimeError:  #RuntimeError
-    microcontroller.reset()
+wifi.connect()
+print("Connected!")
 
 # Initialize MQTT interface with the esp interface
 MQTT.set_socket(socket, esp)
@@ -119,10 +108,7 @@ io.add_feed_callback("led", on_led_msg)
 
 # Connect to Adafruit IO
 print("Connecting to Adafruit IO...")
-try:
-    io.connect()
-except: #RuntimeError
-    microcontroller.reset()
+io.connect()
 
 # Subscribe to all messages on the led feed
 io.subscribe("led")
@@ -144,7 +130,6 @@ while True:
     except (ValueError, RuntimeError) as e:
         print("Failed to get data, retrying\n", e)
         microcontroller.reset()
-        continue
 
     # Send a new temperature reading to IO every 60 seconds
 
@@ -172,18 +157,10 @@ while True:
 
         # publish it to io
         print("Publishing %s to ambient temperature feed..." % temp)
-        try:
-            io.publish("mr-snake-ambient-temp", temp)
-        except RuntimeError:
-            wifi.reset()
-            microcontroller.reset()
+        io.publish("mr-snake-ambient-temp", temp)
 
         print("publishing %s to warm hide temp feed..." % thermistortempF)
-        try:
-            io.publish("mr-snake-warmhide-temp", thermistortempF)
-        except RuntimeError:
-            wifi.reset()
-            microcontroller.reset()
+        io.publish("mr-snake-warmhide-temp", thermistortempF)
 
         print("Published!")
         led_pin.value = False
