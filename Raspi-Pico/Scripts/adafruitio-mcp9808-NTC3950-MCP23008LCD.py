@@ -33,7 +33,19 @@ import adafruit_io
 import adafruit_mcp9808
 import microcontroller
 import adafruit_thermistor
-import adafruit_character_lcd
+import adafruit_character_lcd.character_lcd_i2c as character_lcd
+
+
+### LCD ###
+
+# Modify this if you have a different sized Character LCD
+lcd_columns = 20
+lcd_rows = 4
+
+i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0
+
+# Initialise the lcd class
+lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
 
 
 ### WiFi ###
