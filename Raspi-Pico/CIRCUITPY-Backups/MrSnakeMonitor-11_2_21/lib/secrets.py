@@ -5,6 +5,6 @@ secrets = {
     'ssid' : 'Hawkins Lab 2.0',
     'password' : 'DirtNasty123',
     'timezone' : "America/New_York", # http://worldtimeapi.org/timezones
-    'aio_username': 'csn495',
-    'aio_key': 'aio_ZGUX30tDAEmvyjfCSS5r9iN2cMRs'
+    'aio_username': 'USERNAME',
+    'aio_key': 'KEY'
     }

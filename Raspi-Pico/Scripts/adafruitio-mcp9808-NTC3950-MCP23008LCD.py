@@ -1,5 +1,5 @@
 """
-Required libraries:
+Required libraries in lib folder:
 - adafruit_bus_device
 - adafruit_esp32spi
 - adafruit_io
@@ -8,13 +8,6 @@ Required libraries:
 - adafruit_thermistor
 - adafruit_mcp9808
 - adafruit_requests
-- adafruit_character_lcd
---------------------------------------------------
-To do in order to get this script ready to deploy for mr snake:
-- Define funciton for BME280.
-- Add LCD portion of code to the script.
-- Continue testing with netowork failures to ensure script no longer errors out under any circumstance.
-
 
 """
 
@@ -33,19 +26,7 @@ import adafruit_io
 import adafruit_mcp9808
 import microcontroller
 import adafruit_thermistor
-import adafruit_character_lcd.character_lcd_i2c as character_lcd
-
-
-### LCD ###
-
-# Modify this if you have a different sized Character LCD
-lcd_columns = 20
-lcd_rows = 4
-
-i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0
-
-# Initialise the lcd class
-lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
+import supervisor
 
 
 ### WiFi ###
@@ -101,13 +82,12 @@ def on_led_msg(client, topic, message):
 
 
 # Connect to WiFi
+print("Resetting ESP32, wait 15 seconds...")
+wifi.reset()
+time.sleep(15)
 print("Connecting to WiFi...")
-try:
-    wifi.reset()
-    wifi.connect()
-    print("Connected!")
-except RuntimeError:  #RuntimeError
-    microcontroller.reset()
+wifi.connect()
+print("Connected!")
 
 # Initialize MQTT interface with the esp interface
 MQTT.set_socket(socket, esp)
@@ -134,9 +114,8 @@ io.add_feed_callback("led", on_led_msg)
 print("Connecting to Adafruit IO...")
 try:
     io.connect()
-except: #RuntimeError
-    microcontroller.reset()
-
+except:
+    supervisor.reload()
 # Subscribe to all messages on the led feed
 io.subscribe("led")
 
@@ -154,10 +133,9 @@ while True:
     # Poll for incoming messages
     try:
         io.loop()
-    except (ValueError, RuntimeError) as e:
-        print("Failed to get data, retrying\n", e)
-        microcontroller.reset()
-        continue
+    except:   #(ValueError, RuntimeError) as e:
+        print("Failed to get data, retrying\n")
+        supervisor.reload()
 
     # Send a new temperature reading to IO every 60 seconds
 
@@ -180,43 +158,15 @@ while True:
 
         thermistortempF = ntc_temp()
 
-        def mcp_temp():
-            MCPtempC = mcp.temperature
-            MCPtempF = MCPtempC * 9/5.0 + 32
-            MCPtempF = str(round(MCPtempF, 2))
-            MCPtempF = str(MCPtempF)
-            return MCPtempF
-
-        mcptempF = mcp_temp()
-
         print("warm hide temp is %s degrees F" % thermistortempF)
-
-        print("Ambient Temp is: %s degrees F" % mcptempF")
-
-        # Clear LCD
-        lcd.clear()
-
-        # Turn backlight on
-        lcd.backlight = True
-
-        lcd.message = "MCP9808 Temp:" + mcp_temp() + "F\n\n" + "NTC Temp:" + ntc_temp() + "F"
 
 
         # publish it to io
         print("Publishing %s to ambient temperature feed..." % temp)
-        try:
-            io.publish("mr-snake-ambient-temp", temp)
-        except RuntimeError:
-            wifi.reset()
-            microcontroller.reset()
+        io.publish("mr-snake-ambient-temp", temp)
 
         print("publishing %s to warm hide temp feed..." % thermistortempF)
-        try:
-            io.publish("mr-snake-warmhide-temp", thermistortempF)
-        except RuntimeError:
-            wifi.reset()
-            microcontroller.reset()
-
+        io.publish("mr-snake-warmhide-temp", thermistortempF)
 
         print("Published!")
         led_pin.value = False
