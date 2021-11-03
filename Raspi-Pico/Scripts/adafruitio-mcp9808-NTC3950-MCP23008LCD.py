@@ -11,8 +11,9 @@ Required libraries:
 - adafruit_character_lcd
 --------------------------------------------------
 To do in order to get this script ready to deploy for mr snake:
-- Add funciton for BME280.
+- Define funciton for BME280.
 - Add LCD portion of code to the script.
+- Continue testing with netowork failures to ensure script no longer errors out under any circumstance.
 
 
 """
@@ -167,7 +168,26 @@ while True:
 
         thermistortempF = ntc_temp()
 
+        def mcp_temp():
+            MCPtempC = mcp.temperature
+            MCPtempF = MCPtempC * 9/5.0 + 32
+            MCPtempF = str(round(MCPtempF, 2))
+            MCPtempF = str(MCPtempF)
+            return MCPtempF
+
+        mcptempF = mcp_temp()
+
         print("warm hide temp is %s degrees F" % thermistortempF)
+
+        print("Ambient Temp is: %s degrees F" % mcptempF")
+
+        # Clear LCD
+        lcd.clear()
+
+        # Turn backlight on
+        lcd.backlight = True
+
+        lcd.message = "MCP9808 Temp:" + mcp_temp() + "F\n\n" + "NTC Temp:" + ntc_temp() + "F"
 
 
         # publish it to io
@@ -184,6 +204,7 @@ while True:
         except RuntimeError:
             wifi.reset()
             microcontroller.reset()
+
 
         print("Published!")
         led_pin.value = False
