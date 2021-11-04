@@ -122,7 +122,7 @@ io.subscribe("led")
 
 # configure i2c
 i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0 (LCD)
-i2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1 (MCP9808)
+mcpi2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1 (MCP9808)
 
 # Modify this if you have a different sized Character LCD
 lcd_columns = 20
@@ -132,7 +132,7 @@ lcd_rows = 4
 lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
 
 # initialise mcp9808 using the default address:
-mcp = adafruit_mcp9808.MCP9808(i2c)
+mcp = adafruit_mcp9808.MCP9808(mcpi2c)
 
 # Set up NTC3950
 thermistor = adafruit_thermistor.Thermistor(board.GP26, 10000.0, 10000.0, 25.0, 3950.0, high_side=False)
