@@ -9,6 +9,11 @@ Required libraries in lib folder:
 - adafruit_mcp9808
 - adafruit_requests
 - adafruit_datetime
+---------------------------------------------------------
+Need to port this to use BME280 instead of MCP9808. Should be pulling ambient Temp + Humidity values from BME280, as well as 
+Temp values from the Thermistor which will live inside the warm hide.
+
+supervisor.reload() seems to be working initially. If it ends up not working long term I will try replacing it with microcontroller.reset().
 
 """
 
@@ -159,7 +164,6 @@ while True:
         temp = mcp.temperature * 9 / 5 + 32
         # truncate to two decimal points
         temp = str(temp)[:5]
-        print("ambient temperature is %s degrees C" % temp)
 
         # read temperature from thermistor and define variable for LCD to read from
 
