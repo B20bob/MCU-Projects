@@ -8,6 +8,7 @@ Required libraries in lib folder:
 - adafruit_thermistor
 - adafruit_mcp9808
 - adafruit_requests
+- adafruit_datetime
 
 """
 
@@ -136,6 +137,10 @@ mcp = adafruit_mcp9808.MCP9808(mcpi2c)
 
 # Set up NTC3950
 thermistor = adafruit_thermistor.Thermistor(board.GP26, 10000.0, 10000.0, 25.0, 3950.0, high_side=False)
+
+# Code to pull current time
+
+
 
 prv_refresh_time = 0.0
 while True:
