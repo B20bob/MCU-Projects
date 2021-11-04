@@ -27,6 +27,7 @@ import adafruit_mcp9808
 import microcontroller
 import adafruit_thermistor
 import supervisor
+import adafruit_character_lcd.character_lcd_i2c as character_lcd
 
 
 ### WiFi ###
@@ -120,7 +121,11 @@ except:
 io.subscribe("led")
 
 # configure i2c
-i2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1
+i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0 (LCD)
+i2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1 (MCP9808)
+
+# initialize the lcd class
+lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
 
 # initialise mcp9808 using the default address:
 mcp = adafruit_mcp9808.MCP9808(i2c)
@@ -156,17 +161,33 @@ while True:
             NTCtempF = str(NTCtempF)
             return NTCtempF
 
-        thermistortempF = ntc_temp()
+        ThermistorTempF = ntc_temp()
 
-        print("warm hide temp is %s degrees F" % thermistortempF)
+        def mcptemp():
+            MCPtempC = mcp.temperature
+            MCPtempF = mcp.temperature * 9/5.0 + 32
+            MCPtempF = str(round(MCPtempF, 2))
+            MCPtempF = str(MCPtempF)
+            return MCPtempF
 
+        AmbientTempF = mcptemp()
+
+        ## Print data to LCD
+        #Turn on LCD Backlight
+        lcd.backlight = True
+        lcd.clear
+        lcd.message = "MCP9808 Temp:" + mcptemp() + "F\n" + "NTC Temp:" + ntc_temp() + "F\n"
+        
+
+        print("warm hide temp is: %s degrees F" % ThermistorTempF)
+        print("Ambient Temp is: %s degrees F" % AmbientTempF)
 
         # publish it to io
         print("Publishing %s to ambient temperature feed..." % temp)
         io.publish("mr-snake-ambient-temp", temp)
 
-        print("publishing %s to warm hide temp feed..." % thermistortempF)
-        io.publish("mr-snake-warmhide-temp", thermistortempF)
+        print("publishing %s to warm hide temp feed..." % ThermistorTempF)
+        io.publish("mr-snake-warmhide-temp", ThermistorTempF)
 
         print("Published!")
         led_pin.value = False
