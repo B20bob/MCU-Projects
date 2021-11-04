@@ -124,6 +124,10 @@ io.subscribe("led")
 i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0 (LCD)
 i2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1 (MCP9808)
 
+# Modify this if you have a different sized Character LCD
+lcd_columns = 20
+lcd_rows = 4
+
 # initialize the lcd class
 lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
 
