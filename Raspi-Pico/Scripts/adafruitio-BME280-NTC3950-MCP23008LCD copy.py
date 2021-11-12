@@ -128,7 +128,7 @@ io.subscribe("led")
 
 # configure i2c
 i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0 (LCD)
-mcpi2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1 (MCP9808)
+bmei2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1 (MCP9808)
 
 # Modify this if you have a different sized Character LCD
 lcd_columns = 20
@@ -138,7 +138,7 @@ lcd_rows = 4
 lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
 
 # initialise mcp9808 using the default address:
-mcp = adafruit_mcp9808.MCP9808(mcpi2c)
+bme280 = bme280 = adafruit_bme280.Adafruit_BME280_I2C(bmei2c)
 
 # Set up NTC3950
 thermistor = adafruit_thermistor.Thermistor(board.GP26, 10000.0, 10000.0, 25.0, 3950.0, high_side=False)
@@ -176,12 +176,12 @@ while True:
 
         ThermistorTempF = ntc_temp()
 
-        def mcptemp():
-            MCPtempC = mcp.temperature
-            MCPtempF = mcp.temperature * 9/5.0 + 32
-            MCPtempF = str(round(MCPtempF, 2))
-            MCPtempF = str(MCPtempF)
-            return MCPtempF
+        def bme_temp():
+            bmeTempC = bme280.temperature
+            bmeTempF = bmeTempC* 9/5.0 + 32* 9/5.0 + 32
+            bmeTempF = str(round(bmeTempF, 2))
+            bmeTempF = str(bmeTempF)
+            return bmeTempF
 
         AmbientTempF = mcptemp()
 
