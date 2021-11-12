@@ -128,7 +128,7 @@ io.subscribe("led")
 
 # configure i2c
 i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0 (LCD)
-bmei2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1 (MCP9808)
+bmei2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1 (BME280)
 
 # Modify this if you have a different sized Character LCD
 lcd_columns = 20
@@ -138,7 +138,7 @@ lcd_rows = 4
 lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
 
 # initialise mcp9808 using the default address:
-bme280 = bme280 = adafruit_bme280.Adafruit_BME280_I2C(bmei2c)
+bme280 = bme280 = adafruit_bme280.Adafruit_BME280_I2C(bmei2c, 0x76)
 
 # Set up NTC3950
 thermistor = adafruit_thermistor.Thermistor(board.GP26, 10000.0, 10000.0, 25.0, 3950.0, high_side=False)
@@ -174,33 +174,43 @@ while True:
             NTCtempF = str(NTCtempF)
             return NTCtempF
 
-        ThermistorTempF = ntc_temp()
+        #ThermistorTempF = ntc_temp()
 
         def bme_temp():
             bmeTempC = bme280.temperature
-            bmeTempF = bmeTempC* 9/5.0 + 32* 9/5.0 + 32
+            bmeTempF = bmeTempC * 9/5.0 + 32
             bmeTempF = str(round(bmeTempF, 2))
             bmeTempF = str(bmeTempF)
             return bmeTempF
 
-        AmbientTempF = bme_temp()
+        #AmbientTempF = bme_temp()
+
+        def bme_humidity():
+            humidity = bme280.relative_humidity
+            humidity = str(round(humidity, 2))
+            humidity = str(humidity)
+            return humidity
+            
 
         ## Print data to LCD
         #Turn on LCD Backlight
         lcd.backlight = True
         lcd.clear
-        lcd.message = "BME280 Temp:" + bme_temp() + "F\n" + "NTC Temp:" + ntc_temp() + "F\n"
+        lcd.message = "Ambient Temp:" + bme_temp() + "F\n" + "WarmHide Temp:" + ntc_temp() + "F\n" + "Humidity:" + bme_humidity() + "%"
         
 
-        print("warm hide temp is: %s degrees F" % ThermistorTempF)
+        print("warm hide temp is: %s degrees F" % ntc_temp())
         print("Ambient Temp is: %s degrees F" % bme_temp())
 
         # publish it to io
         print("Publishing %s to ambient temperature feed..." % bme_temp())
         io.publish("mr-snake-ambient-temp", bme_temp())
 
-        print("publishing %s to warm hide temp feed..." % ThermistorTempF)
-        io.publish("mr-snake-warmhide-temp", ThermistorTempF)
+        print("publishing %s to warm hide temp feed..." % ntc_temp())
+        io.publish("mr-snake-warmhide-temp", ntc_temp())
+
+        print("publishing %s to humidity feed..." % bme_humidity())
+        io.publish("mr-snake-humidity", bme_humidity())
 
         print("Published!")
         led_pin.value = False
