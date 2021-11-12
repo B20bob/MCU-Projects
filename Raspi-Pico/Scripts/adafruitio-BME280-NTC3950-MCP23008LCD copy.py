@@ -6,9 +6,8 @@ Required libraries in lib folder:
 - adafruit_mcp230xx
 - adafruit_register
 - adafruit_thermistor
-- adafruit_mcp9808
 - adafruit_requests
-- adafruit_datetime
+- adafruit_bme280
 ---------------------------------------------------------
 Need to port this to use BME280 instead of MCP9808. Should be pulling ambient Temp + Humidity values from BME280, as well as 
 Temp values from the Thermistor which will live inside the warm hide.
