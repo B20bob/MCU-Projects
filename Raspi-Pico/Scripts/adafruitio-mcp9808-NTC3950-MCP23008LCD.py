@@ -140,8 +140,7 @@ except:
 # Subscribe to all messages on the led feed
 io.subscribe("led")
 
-# configure i2c
-i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0 (LCD)
+# configure i2c for mcp9808
 mcpi2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1 (MCP9808)
 
 
