@@ -106,8 +106,10 @@ lcd.message = "Initializing..."
 wifi.reset()
 time.sleep(15)
 print("Connecting to WiFi...")
+lcd.message = "\n WiFi..."
 wifi.connect()
 print("Connected!")
+lcd.message = "Connected"
 
 
 # Initialize MQTT interface with the esp interface
@@ -133,10 +135,12 @@ io.add_feed_callback("led", on_led_msg)
 
 # Connect to Adafruit IO
 print("Connecting to Adafruit IO...")
+lcd.message = "\nIO..."
 try:
     io.connect()
 except:
     supervisor.reload()
+lcd.message = "Connected"
 # Subscribe to all messages on the led feed
 io.subscribe("led")
 
