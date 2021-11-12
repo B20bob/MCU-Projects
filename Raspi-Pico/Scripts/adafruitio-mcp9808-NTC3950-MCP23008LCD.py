@@ -37,6 +37,15 @@ import supervisor
 import adafruit_character_lcd.character_lcd_i2c as character_lcd
 
 
+i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0 (LCD)
+
+# Modify this if you have a different sized Character LCD
+lcd_columns = 20
+lcd_rows = 4
+
+# initialize the lcd class
+lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
+
 ### WiFi ###
 
 # Get wifi details and more from a secrets.py file
@@ -91,11 +100,15 @@ def on_led_msg(client, topic, message):
 
 # Connect to WiFi
 print("Resetting ESP32, wait 15 seconds...")
+lcd.backlight = True
+lcd.clear
+lcd.message = "Initializing..."
 wifi.reset()
 time.sleep(15)
 print("Connecting to WiFi...")
 wifi.connect()
 print("Connected!")
+
 
 # Initialize MQTT interface with the esp interface
 MQTT.set_socket(socket, esp)
@@ -131,20 +144,12 @@ io.subscribe("led")
 i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0 (LCD)
 mcpi2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1 (MCP9808)
 
-# Modify this if you have a different sized Character LCD
-lcd_columns = 20
-lcd_rows = 4
-
-# initialize the lcd class
-lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
 
 # initialise mcp9808 using the default address:
 mcp = adafruit_mcp9808.MCP9808(mcpi2c)
 
 # Set up NTC3950
 thermistor = adafruit_thermistor.Thermistor(board.GP26, 10000.0, 10000.0, 25.0, 3950.0, high_side=False)
-
-# Code to pull current time
 
 
 

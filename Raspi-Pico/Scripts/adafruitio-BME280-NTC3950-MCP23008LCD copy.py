@@ -195,7 +195,7 @@ while True:
         #Turn on LCD Backlight
         lcd.backlight = True
         lcd.clear
-        lcd.message = "Ambient Temp:" + bme_temp() + "F\n" + "WarmHide Temp:" + ntc_temp() + "F\n" + "Humidity:" + bme_humidity() + "%"
+        lcd.message = "     Mr. Snake\n" + "Ambient Temp:" + bme_temp() + "F\n" + "WarmHide Temp:" + ntc_temp() + "F\n" + "Humidity:" + bme_humidity() + "%"
         
 
         print("warm hide temp is: %s degrees F" % ntc_temp())
