@@ -139,7 +139,6 @@ try:
     io.connect()
 except:
     supervisor.reload()
-lcd.clear()
 
 
 # Subscribe to all messages on the led feed
