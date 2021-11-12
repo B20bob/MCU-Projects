@@ -29,7 +29,7 @@ import adafruit_esp32spi.adafruit_esp32spi_socket as socket
 import adafruit_minimqtt.adafruit_minimqtt as MQTT
 from adafruit_io.adafruit_io import IO_MQTT
 import adafruit_io
-import adafruit_mcp9808
+from adafruit_bme280 import basic as adafruit_bme280
 import microcontroller
 import adafruit_thermistor
 import supervisor
@@ -160,8 +160,8 @@ while True:
 
     if (time.monotonic() - prv_refresh_time) > 60:
         led_pin.value = True
-        # read tempurate from mcp9808
-        temp = mcp.temperature * 9 / 5 + 32
+        # read tempurate from bme280
+        temp = bme280.temperature * 9 / 5 + 32
         # truncate to two decimal points
         temp = str(temp)[:5]
 
@@ -183,21 +183,21 @@ while True:
             bmeTempF = str(bmeTempF)
             return bmeTempF
 
-        AmbientTempF = mcptemp()
+        AmbientTempF = bme_temp()
 
         ## Print data to LCD
         #Turn on LCD Backlight
         lcd.backlight = True
         lcd.clear
-        lcd.message = "MCP9808 Temp:" + mcptemp() + "F\n" + "NTC Temp:" + ntc_temp() + "F\n"
+        lcd.message = "BME280 Temp:" + bme_temp() + "F\n" + "NTC Temp:" + ntc_temp() + "F\n"
         
 
         print("warm hide temp is: %s degrees F" % ThermistorTempF)
-        print("Ambient Temp is: %s degrees F" % AmbientTempF)
+        print("Ambient Temp is: %s degrees F" % bme_temp())
 
         # publish it to io
-        print("Publishing %s to ambient temperature feed..." % temp)
-        io.publish("mr-snake-ambient-temp", temp)
+        print("Publishing %s to ambient temperature feed..." % bme_temp())
+        io.publish("mr-snake-ambient-temp", bme_temp())
 
         print("publishing %s to warm hide temp feed..." % ThermistorTempF)
         io.publish("mr-snake-warmhide-temp", ThermistorTempF)
