@@ -101,12 +101,12 @@ def on_led_msg(client, topic, message):
 # Connect to WiFi
 print("Resetting ESP32, wait 15 seconds...")
 lcd.backlight = True
-lcd.clear
+lcd.clear()
 lcd.message = "Initializing..."
 wifi.reset()
 time.sleep(15)
 print("Connecting to WiFi...")
-lcd.message = "\n WiFi..."
+lcd.message = "\nWiFi..."
 wifi.connect()
 print("Connected!")
 
@@ -134,12 +134,14 @@ io.add_feed_callback("led", on_led_msg)
 
 # Connect to Adafruit IO
 print("Connecting to Adafruit IO...")
-lcd.message = "\nIO..."
+lcd.message = "\n\nIO..."
 try:
     io.connect()
 except:
     supervisor.reload()
-lcd.message = "Connected"
+lcd.clear()
+
+
 # Subscribe to all messages on the led feed
 io.subscribe("led")
 
@@ -196,7 +198,7 @@ while True:
         ## Print data to LCD
         #Turn on LCD Backlight
         lcd.backlight = True
-        lcd.clear
+        lcd.clear()
         lcd.message = "MCP9808 Temp:" + mcptemp() + "F\n" + "NTC Temp:" + ntc_temp() + "F\n"
         
 
