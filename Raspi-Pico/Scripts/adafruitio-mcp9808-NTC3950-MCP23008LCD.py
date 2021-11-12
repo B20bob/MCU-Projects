@@ -109,7 +109,6 @@ print("Connecting to WiFi...")
 lcd.message = "\n WiFi..."
 wifi.connect()
 print("Connected!")
-lcd.message = "Connected"
 
 
 # Initialize MQTT interface with the esp interface
