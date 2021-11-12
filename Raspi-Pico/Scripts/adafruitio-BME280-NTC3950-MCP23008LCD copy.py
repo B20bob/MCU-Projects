@@ -14,6 +14,8 @@ Temp values from the Thermistor which will live inside the warm hide.
 
 supervisor.reload() seems to be working initially. If it ends up not working long term I will try replacing it with microcontroller.reset().
 
+Need to add boot screen like I did on MCP version of this script.
+
 """
 
 
