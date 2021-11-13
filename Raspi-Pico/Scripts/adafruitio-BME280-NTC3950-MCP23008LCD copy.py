@@ -37,6 +37,15 @@ import supervisor
 import adafruit_character_lcd.character_lcd_i2c as character_lcd
 
 
+i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0 (LCD)
+
+# Modify this if you have a different sized Character LCD
+lcd_columns = 20
+lcd_rows = 4
+
+# initialize the lcd class
+lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
+
 ### WiFi ###
 
 # Get wifi details and more from a secrets.py file
@@ -91,9 +100,14 @@ def on_led_msg(client, topic, message):
 
 # Connect to WiFi
 print("Resetting ESP32, wait 15 seconds...")
+lcd.backlight = True
+lcd.clear()
+lcd.blink = True
+lcd.message = "Initializing..."
 wifi.reset()
 time.sleep(15)
 print("Connecting to WiFi...")
+lcd.message = "\nWiFi..."
 wifi.connect()
 print("Connected!")
 
@@ -120,23 +134,18 @@ io.add_feed_callback("led", on_led_msg)
 
 # Connect to Adafruit IO
 print("Connecting to Adafruit IO...")
+lcd.message = "\n\nIO..."
 try:
     io.connect()
 except:
     supervisor.reload()
+
 # Subscribe to all messages on the led feed
 io.subscribe("led")
 
 # configure i2c
-i2c = busio.I2C(scl=board.GP1, sda=board.GP0)  # uses I2C0 (LCD)
 bmei2c = busio.I2C(scl=board.GP3, sda=board.GP2)  # uses I2C1 (BME280)
 
-# Modify this if you have a different sized Character LCD
-lcd_columns = 20
-lcd_rows = 4
-
-# initialize the lcd class
-lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
 
 # initialise mcp9808 using the default address:
 bme280 = bme280 = adafruit_bme280.Adafruit_BME280_I2C(bmei2c, 0x76)

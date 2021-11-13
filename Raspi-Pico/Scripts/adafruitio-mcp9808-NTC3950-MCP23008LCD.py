@@ -102,6 +102,7 @@ def on_led_msg(client, topic, message):
 print("Resetting ESP32, wait 15 seconds...")
 lcd.backlight = True
 lcd.clear()
+lcd.blink = True
 lcd.message = "Initializing..."
 wifi.reset()
 time.sleep(15)
@@ -196,6 +197,7 @@ while True:
 
         ## Print data to LCD
         #Turn on LCD Backlight
+        lcd.blink = False
         lcd.backlight = True
         lcd.clear()
         lcd.message = "MCP9808 Temp:" + mcptemp() + "F\n" + "NTC Temp:" + ntc_temp() + "F\n"
