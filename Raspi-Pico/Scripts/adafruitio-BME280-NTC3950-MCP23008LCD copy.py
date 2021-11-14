@@ -8,13 +8,12 @@ Required libraries in lib folder:
 - adafruit_thermistor
 - adafruit_requests
 - adafruit_bme280
+- adafuit_charactor_lcd
 ---------------------------------------------------------
-Need to port this to use BME280 instead of MCP9808. Should be pulling ambient Temp + Humidity values from BME280, as well as 
+Should be pulling ambient Temp + Humidity values from BME280, as well as
 Temp values from the Thermistor which will live inside the warm hide.
 
-supervisor.reload() seems to be working initially. If it ends up not working long term I will try replacing it with microcontroller.reset().
-
-Need to add boot screen like I did on MCP version of this script and flash to Mr snake monitor deployment.
+supervisor.reset() did not seem to be keeping system online during deployment. Changed to microcontroller.reset(). Hopefullly that will resolve the issue.
 
 """
 
@@ -138,7 +137,7 @@ lcd.message = "\n\nIO..."
 try:
     io.connect()
 except:
-    supervisor.reload()
+    microcontroller.reset()
 
 # Subscribe to all messages on the led feed
 io.subscribe("led")
@@ -161,8 +160,8 @@ while True:
     try:
         io.loop()
     except:   #(ValueError, RuntimeError) as e:
-        print("Failed to get data, retrying\n")
-        supervisor.reload()
+        print("Failed to get data, resetting Pico and ESP32\n")
+        microcontroller.reset()
 
     # Send a new temperature reading to IO every 60 seconds
 
@@ -200,13 +199,13 @@ while True:
             humidity = str(round(humidity, 2))
             humidity = str(humidity)
             return humidity
-            
+
 
         ## Print data to LCD
         lcd.backlight = True
         lcd.clear
         lcd.message = "     Mr. Snake\n" + "Ambient Temp:" + bme_temp() + "F\n" + "WarmHide Temp:" + ntc_temp() + "F\n" + "Humidity:" + bme_humidity() + "%"
-        
+
 
         print("warm hide temp is: %s degrees F" % ntc_temp())
         print("Ambient Temp is: %s degrees F" % bme_temp())
