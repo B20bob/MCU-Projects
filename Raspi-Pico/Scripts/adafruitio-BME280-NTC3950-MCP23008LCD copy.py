@@ -153,9 +153,7 @@ bme280 = bme280 = adafruit_bme280.Adafruit_BME280_I2C(bmei2c, 0x76)
 # Set up NTC3950
 thermistor = adafruit_thermistor.Thermistor(board.GP26, 10000.0, 10000.0, 25.0, 3950.0, high_side=False)
 
-# Code to pull current time
 
-lcd.blink = False
 
 prv_refresh_time = 0.0
 while True:
@@ -167,6 +165,8 @@ while True:
         supervisor.reload()
 
     # Send a new temperature reading to IO every 60 seconds
+
+    lcd.blink = False
 
     if (time.monotonic() - prv_refresh_time) > 60:
         led_pin.value = True
