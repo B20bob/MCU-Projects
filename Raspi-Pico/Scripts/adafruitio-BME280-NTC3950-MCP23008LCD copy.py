@@ -155,7 +155,7 @@ thermistor = adafruit_thermistor.Thermistor(board.GP26, 10000.0, 10000.0, 25.0, 
 
 # Code to pull current time
 
-
+lcd.blink = False
 
 prv_refresh_time = 0.0
 while True:
@@ -203,7 +203,6 @@ while True:
             
 
         ## Print data to LCD
-        #Turn on LCD Backlight
         lcd.backlight = True
         lcd.clear
         lcd.message = "     Mr. Snake\n" + "Ambient Temp:" + bme_temp() + "F\n" + "WarmHide Temp:" + ntc_temp() + "F\n" + "Humidity:" + bme_humidity() + "%"
